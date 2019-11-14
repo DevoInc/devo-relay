@@ -1,0 +1,6 @@
+target(
+memoryBufferLimit = 536870912,
+diskBufferLimit = 2147483648,
+keepAlive = true,
+bufferSize = None
+)

@@ -1,0 +1,11 @@
+source(
+port = 13002,
+udpThreads = 1,
+udpReceiveBuffer = None,
+maxPacketSize = 32*1024,
+tcpThreads = 1,
+tcpReceiveBuffer = None
+)
+
+rule(order = 0,
+ targetTag = "box.win.\\0")

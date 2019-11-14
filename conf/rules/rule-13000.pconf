@@ -1,0 +1,10 @@
+source(
+port = 13000,
+udpThreads = 2,
+udpReceiveBuffer = None,
+maxPacketSize = 32*1024,
+tcpThreads = 2,
+tcpReceiveBuffer = None
+)
+
+rule(order = 0)
