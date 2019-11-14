@@ -3,8 +3,11 @@
 Devo Relay scoja based docker project
 
 Project to deploy a Relay using docker without to be necessary install anything.
+
 To connect to relay just send your event to localhost at default ports 12999/13002
+
 The compose is ready to share ports from 12999 to 13030 to cover more needs than default ports
+
 The first time when your run the docker Relay, remember to active the relay in Devo Website
 
 Clone the repository or download [relay.tar.gz](./relay.tar.gz)
