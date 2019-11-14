@@ -17,8 +17,8 @@ Clone the repository or download [relay.tar.gz](./relay.tar.gz)
 
 ## Run and Stop docker Relay
 
-1. Run: DCKHUB=devoinc/ docker-compose -f docker-devo-relay.yml up -d
-2. Stop: docker-compose -f docker-devo-relay.yml down
+1. Run: `DCKHUB=devoinc/ docker-compose -f docker-devo-relay.yml up -d`
+2. Stop: `docker-compose -f docker-devo-relay.yml down`
 
 ## Tips and tricks
 
@@ -30,7 +30,7 @@ Clone the repository or download [relay.tar.gz](./relay.tar.gz)
     1. docker exec -it Devo-Relay /bin/bash
 
 3. Run relay without compose and without to use this repository:
-    1. docker run -it -p 12999-13030:12999-13030 -e LOGTRUST_WEB=https://eu.devo.com -e LOGTRUST_ENDPOINT=eu.elb.relay.logtrust.net -e RELAY_NAME=docker-relay-domain_name -e RELAY_APIKEY=YOUR_API_KEY --name Devo-Relay -v "$your_path_keys:/etc/logtrust/scoja/current/keys" -v "$your_path_logs:/var/log" -v "$your_path_relay-data:/opt/devo/relay-data" -v "$your_path_rules:/etc/logtrust/scoja/current/rules" -v "$your_path_unrules:/etc/logtrust/scoja/current/unrules" devoinc/devo-relay:1.1.6 /opt/devo/run/docker-start
+    1. `docker run -it -p 12999-13030:12999-13030 -e LOGTRUST_WEB=https://eu.devo.com -e LOGTRUST_ENDPOINT=eu.elb.relay.logtrust.net -e RELAY_NAME=docker-relay-domain_name -e RELAY_APIKEY=YOUR_API_KEY --name Devo-Relay -v "$your_path_keys:/etc/logtrust/scoja/current/keys" -v "$your_path_logs:/var/log" -v "$your_path_relay-data:/opt/devo/relay-data" -v "$your_path_rules:/etc/logtrust/scoja/current/rules" -v "$your_path_unrules:/etc/logtrust/scoja/current/unrules" devoinc/devo-relay:1.1.6 /opt/devo/run/docker-start`
     2. Set correct values for:
         1. LOGTRUST_WEB
         2. LOGTRUST_ENDPOINT
