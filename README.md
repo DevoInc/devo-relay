@@ -39,3 +39,15 @@ Clone the repository or download [relay.tar.gz](./relay.tar.gz)
         5. $your_path_xxx (absolute path required)
 
 4. You can download the image using: `docker pull devoinc/devo-relay:1.1.6`
+
+## Author
+
+jordilobo | [jordi.lobo@devo.com](mailto:jordi.lobo@devo.com)
+
+## Contact Us
+You can contact with us at support@devo.com.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+#### Enjoy it
