@@ -10,7 +10,7 @@ The compose is ready to share ports from 12999 to 13030 to cover more needs than
 
 The first time when your run the docker Relay, remember to active the relay in Devo Website
 
-Clone the repository or download [relay.tar.gz](./relay.tar.gz)
+Clone or [download](https://github.com/DevoInc/devo-relay/archive/master.zip) the repository.
 
 Be sure that [conf/docker-start](./conf/docker-start) has executable permissions after uncompress or clone the repository
 
