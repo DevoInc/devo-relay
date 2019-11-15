@@ -13,9 +13,6 @@ if [ -f "/opt/devo/relay-data/pass.temp" ]; then
   sed -i -e 's/keypass = \".*\"/keypass = \"'"${newpass}"'\"/' /etc/logtrust/scoja/current/local.py
 fi
 
-
-
-# /usr/sbin/crond
 runPath=/opt/devo/run
 mkdir -p /opt/devo/run
 LockFile=runPath
