@@ -29,7 +29,7 @@ services:
      - 12999-13030:12999-13030
     volumes:
        ###App persisten information
-       - ./conf/docker-start:/opt/logtrust/docker-start
+       - ./conf/docker-start:/opt/devo/docker-start
        - type: bind
          source: "./conf/relay-data"
          target: "/opt/devo/relay-data"
@@ -50,7 +50,7 @@ services:
          aliases:
            - DevoRelay
     # To debug comment the next line
-    command: /opt/logtrust/docker-start
+    command: /opt/devo/docker-start
     logging:
       driver: none
 
