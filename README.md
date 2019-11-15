@@ -12,6 +12,8 @@ The first time when your run the docker Relay, remember to active the relay in D
 
 Clone the repository or download [relay.tar.gz](./relay.tar.gz)
 
+Be sure that [conf/docker-start](.conf/docker-start) has executable permissions after uncompress or clone the repository
+
 ## Needs to run relay: (Modify in docker-devo-relay.yml)
 1. LOGTRUST_WEB = https://eu.devo.com | https://us.devo.com | https://es.devo.com | ...
 2. LOGTRUST_ENDPOINT = eu.elb.relay.logtrust.net | us.elb.relay.logtrust.net | ...
