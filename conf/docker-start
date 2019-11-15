@@ -14,9 +14,8 @@ if [ -f "/opt/devo/relay-data/pass.temp" ]; then
 fi
 
 runPath=/opt/devo/run
-mkdir -p /opt/devo/run
-LockFile=runPath
-FILE="${scriptPath}/${LockFile}.lock"
+LockFile=scoja
+FILE="${runPath}/${LockFile}.lock"
 if [ ! -f "$FILE" ]; then
   touch $FILE
   /opt/logtrust/scoja/scoja.sh -r 5s -G /etc/logtrust/scoja/version1/all-me.conf -j /etc/logtrust/scoja/version1/all-var.conf > /var/log/scoja.log 2>&1 &
