@@ -20,7 +20,7 @@ Be sure that [conf/docker-start](./conf/docker-start) has executable permissions
 3. LOGTRUST_PORT = 443 | 6514 | 877 | ... (listening port of Devo elb)
 4. RELAY_NAME = The_name_for_your_relay
 5. RELAY_APIKEY = YOUR_API_KEY from your domain when you want to send events
-6. SELFSIGNED=1 Uncomment this environtment variable in docker-devo-relay if you are connecting the relay to endpoint/web with selfsigned certificates
+6. SELFSIGNED=1 Uncomment this environtment variable in [docker-devo-relay.yml](./docker-devo-relay.yml) if you are connecting the relay to endpoint/web with selfsigned certificates
 
 ## Run and Stop docker Relay
 
