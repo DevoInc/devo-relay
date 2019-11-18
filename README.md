@@ -46,10 +46,10 @@ Be sure that [conf/docker-start](./conf/docker-start) has executable permissions
         5. $your_path_xxx (absolute path required)
 
 4. Set proxy values in [docker-devo-relay.yml](./docker-devo-relay.yml) if it's necessary in for your network. Default "" is not applied:
-        1. PROXY_HOST=""
-        2. PROXY_PORT=""
-        3. PROXY_USER=""
-        4. PROXY_PASS=""
+    1. PROXY_HOST=""
+    2. PROXY_PORT=""
+    3. PROXY_USER=""
+    4. PROXY_PASS=""
 
 5. You can download the image using: `docker pull devoinc/devo-relay:1.1.6`
 
