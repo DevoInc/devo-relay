@@ -17,14 +17,23 @@ services:
     restart: always
     environment:
       - DUMMYSTAT=0
+      # UNCOMMENT THE NEXT ENVIROMENT VARIABLE TO USE RELAY IN Cloud/OnPREM with SELFSIGNED CERTS
+      # - SELFSIGNED=1
       # Set the right DEVO WEB in LOGTRUST_WEB va: eu.devo.com | us.devo.com | es.devo.com
       - LOGTRUST_WEB=https://eu.devo.com
       # Set the right end point for the choosed Devo cloud
       - LOGTRUST_ENDPOINT=eu.elb.relay.logtrust.net
+      # Set the right secure port to send data to Devo
+      - LOGTRUST_PORT=443
       # Set the name for the relay, usually relay-domain_name
       - RELAY_NAME=docker-relay-domain
       # Set valid APIKEY for the domain
       - RELAY_APIKEY=YOUR_API_KEY
+      # Set proxy values if it's necessary in for your network. Default "" is not applied
+      - PROXY_HOST=""
+      - PROXY_PORT=""
+      - PROXY_USER=""
+      - PROXY_PASS=""
     ports:
      - 12999-13030:12999-13030
     volumes:

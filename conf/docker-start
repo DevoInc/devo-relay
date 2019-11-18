@@ -2,16 +2,26 @@
 
 set -e
 
-envtpl /etc/logtrust/relay/logtrust.conf.tpl
-envtpl /etc/logtrust/scoja/version1/local.py.tpl
+if [ $SELFSIGNED == "1" ]; then
+  export PYTHONHTTPSVERIFY=0
+  echo "export PYTHONHTTPSVERIFY=0" > /opt/devo/relay-data/selfsigned
+else
+  rm -f /opt/devo/relay-data/selfsigned
+fi
+
+envtpl --keep-template /etc/logtrust/relay/logtrust.conf.tpl
+envtpl --keep-template /etc/logtrust/scoja/version1/local.py.tpl
 echo "" > /opt/devo/relay-data/scoja.pid
 
 chmod 600 /etc/logtrust/relay/logtrust.conf /etc/logtrust/scoja/version1/local.py
 
+### Recovery connection if it exists previously
 if [ -f "/opt/devo/relay-data/pass.temp" ]; then
   newpass=`cat /opt/devo/relay-data/pass.temp |cut -d"=" -f2|sed 's/\//'"\\\\\\\\\/"'/g'`
   sed -i -e 's/keypass = \".*\"/keypass = \"'"${newpass}"'\"/' /etc/logtrust/scoja/current/local.py
 fi
+
+/opt/logtrust/relay/UpdateRelay.py  > /var/log/lt-relay.log 2>&1
 
 runPath=/opt/devo/run
 LockFile=scoja
@@ -22,22 +32,6 @@ if [ ! -f "$FILE" ]; then
   echo $! > /opt/devo/relay-data/scoja.pid
 fi
 
-while [ 1 ] ; do
-  sleep 10
-  /opt/logtrust/relay/UpdateRelay.py > /var/log/lt-relay.log 2>&1
-
-  if [ -f /etc/logtrust/scoja/current/config-relay.tar ] ; then
-    tar  -C /etc/logtrust/scoja/current -xf /etc/logtrust/scoja/current/config-relay.tar
-    newpass=`cat /etc/logtrust/scoja/current/pass.temp |cut -d"=" -f2|sed 's/\//'"\\\\\\\\\/"'/g'`
-    sed -i -e 's/keypass = \".*\"/keypass = \"'"${newpass}"'\"/' /etc/logtrust/scoja/current/local.py
-    cp /etc/logtrust/scoja/current/pass.temp /opt/devo/relay-data
-    pidScoja=`cat /opt/devo/relay-data/scoja.pid`
-    pkill -P $pidScoja
-    /opt/logtrust/scoja/scoja.sh -r 5s -G /etc/logtrust/scoja/version1/all-me.conf -j /etc/logtrust/scoja/version1/all-var.conf > /var/log/scoja.log 2>&1 &
-    echo $! > /opt/devo/relay-data/scoja.pid
-    rm -f /etc/logtrust/scoja/current/config-relay.tar
-  fi
-
-done
+/usr/sbin/cron -f
 
 ### END
