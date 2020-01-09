@@ -29,7 +29,7 @@ services:
       - RELAY_NAME=docker-relay-domain
       # Set valid APIKEY for the domain
       - RELAY_APIKEY=YOUR_API_KEY
-      # Set proxy values if it's necessary in for your network. Default "" is not applied
+      # Set proxy values if it's necessary in for your network. Default empty values are not applied
       - PROXY_HOST=
       - PROXY_PORT=
       - PROXY_USER=
