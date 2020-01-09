@@ -30,10 +30,10 @@ services:
       # Set valid APIKEY for the domain
       - RELAY_APIKEY=YOUR_API_KEY
       # Set proxy values if it's necessary in for your network. Default "" is not applied
-      - PROXY_HOST=""
-      - PROXY_PORT=""
-      - PROXY_USER=""
-      - PROXY_PASS=""
+      - PROXY_HOST=
+      - PROXY_PORT=
+      - PROXY_USER=
+      - PROXY_PASS=
     ports:
      - 12999-13030:12999-13030
     volumes:
