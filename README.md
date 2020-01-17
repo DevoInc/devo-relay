@@ -58,9 +58,11 @@ Be sure that [conf/docker-start](./conf/docker-start) has executable permissions
 jordilobo | [jordi.lobo@devo.com](mailto:jordi.lobo@devo.com)
 
 ## Contact Us
+
 You can contact with us at support@devo.com.
 
 ## License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 #### Enjoy it
