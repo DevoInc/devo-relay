@@ -6,7 +6,6 @@ __pycache__/
 *.pyc
 
 # Related files to deploy relay
-*.jks
-*.log
-*.temp
-conf/relay-data/selfsigned
+conf/keys/client.jks
+conf/logs/*.log
+conf/relay-data/*
