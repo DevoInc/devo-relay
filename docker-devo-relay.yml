@@ -17,6 +17,8 @@ services:
     restart: always
     environment:
       - DUMMYSTAT=0
+      # Set this variable to 1 if you don't want/need monitor the relay
+      - SKIPMONITORING=0
       # UNCOMMENT THE NEXT ENVIROMENT VARIABLE TO USE RELAY IN Cloud/OnPREM with SELFSIGNED CERTS
       # - SELFSIGNED=1
       # Set the right DEVO WEB in LOGTRUST_WEB va: eu.devo.com | us.devo.com | es.devo.com
@@ -54,6 +56,11 @@ services:
        - type: bind
          source: "./conf/logs"
          target: "/var/log"
+       ### Healthcheck to monitor service
+       - ./conf/healthcheck/AuxFunctions.sh:/opt/devo/healthcheck/AuxFunctions.sh
+       - ./conf/healthcheck/relay_monitoring.sh:/opt/devo/healthcheck/relay_monitoring.sh
+       - ./conf/healthcheck/sendlogs.sh:/opt/devo/healthcheck/sendlogs.sh
+       - /var/log:/opt/devo/healthcheck/outs
     networks:
        devoring:
          aliases:
@@ -62,5 +69,11 @@ services:
     command: /opt/devo/docker-start
     logging:
       driver: none
+    healthcheck:
+      test: ["CMD", "su", "logtrust", "/opt/devo/healthcheck/relay_monitoring.sh"]
+      interval: 1m0s
+      timeout: 30s
+      retries: 3
+      start_period: 120s
 
 ### END

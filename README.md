@@ -15,6 +15,7 @@ Clone or [download](https://github.com/DevoInc/devo-relay/archive/master.zip) th
 Be sure that [conf/docker-start](./conf/docker-start) has executable permissions after uncompress or clone the repository
 
 ## Needs to run relay: (Modify in docker-devo-relay.yml)
+0. SKIPMONITORING = 0 (Set this variable to 1 if you don't want/need monitor the relay)
 1. LOGTRUST_WEB = https://eu.devo.com | https://us.devo.com | https://es.devo.com | ... (Devo web)
 2. LOGTRUST_ENDPOINT = eu.elb.relay.logtrust.net | us.elb.relay.logtrust.net | ... (Devo elb)
 3. LOGTRUST_PORT = 443 | 6514 | 877 | ... (listening port of Devo elb)
