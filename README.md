@@ -1,7 +1,7 @@
 # NG-Relay Docker Compose
 
 This repository contains an example of how to run the Devo NG-Relay and Devo
-NG-Relay Cli together with [docker compose](https://github.com/docker/compose).
+NG-Relay CLI together with [docker compose](https://github.com/docker/compose).
 It is not mandatory, but recommended, to run both applications.
 
 ## Requirements
@@ -29,6 +29,21 @@ mkdir conf buffer logs
 sudo chmod 777 conf/ buffer/ logs/
 ```
 
+## Environment
+
+To work with this docker-compose file, some environment variables need to be
+set. For this purpose, there is an environment file `.env` in which you can set
+them. There is a short description of each of them below:
+
+| Name                  | Mandatory | Default Value | Description |
+| --------------------- | :-------: | :-----------: | ----------- |
+| NG_RELAY_VERSION      | Yes       | 2.0.1         | Version of the Devo NG-Relay. |
+| LOG_LEVEL             | No        | info          | Sets the log level for the Devo NG-Relay. |
+| JAVA_OPTS             | No        |               | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
+| TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
+| UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
+| NG_RELAY_CLI_VERSION  | Yes       | 1.0.0         | Version of the Devo NG-Relay CLI. |
+
 ## Quick Start
 
 The recommended way to launch this docker-compose is executing the following
@@ -38,8 +53,8 @@ command:
 docker-compose run -rm devo-ng-relay-cli
 ```
 
-The command above will run the Devo NG-Relay and the Devo NG-Relay Cli and will
-present the prompt of the Devo NG-Relay Cli waiting for commands to run.
+The command above will run the Devo NG-Relay and the Devo NG-Relay CLI and will
+present the prompt of the Devo NG-Relay CLI waiting for commands to run.
 
 If you only want to launch the Devo NG-Relay, you can try one of the following
 commands:
@@ -56,25 +71,9 @@ commands:
 If you encounter any problem, refer to the [Troubleshooting](#Troubleshooting)
 section.
 
-## Environment
-
-To work with this docker-compose file, some environment variables need to be
-set. For this purpose, there is an environment file `.env` in which you can set
-them. There is a short description of each of them below:
-
-| Name                  | Mandatory | Default Value | Description |
-| --------------------- | :-------: | :-----------: | ----------- |
-| NG_RELAY_VERSION      | Yes       | 2.0.1         | Version of the Devo NG-Relay. |
-| LOG_LEVEL             | No        | info          | Sets the log level for the Devo NG-Relay. |
-| JAVA_OPTS             | No        |               | space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
-| TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
-| UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
-| NG_RELAY_CLI_VERSION  | Yes       | 1.0.0         | Version of the Devo NG-Relay Cli. |
-
-
 ## Troubleshooting
 
-### Devo NG-Relay Cli cannot connect to Devo NG-Relay
+### Devo NG-Relay CLI cannot connect to Devo NG-Relay
 
 Often, the first time this docker-compose is launched we might see the following
 message:
@@ -98,7 +97,7 @@ ERROR: 1
 
 ```
 This occurs because the Devo NG-Relay is not fully started when the Devo
-NG-Relay Cli started. To solve this, simply re-run the command below:
+NG-Relay CLI started. To solve this, simply re-run the command below:
 
 ```bash
 docker-compose run -rm devo-ng-relay-cli
@@ -159,31 +158,49 @@ devo-ng-relay        | java.nio.file.AccessDeniedException: java.nio.file.Access
 To solve this, ensure the volume folders have the right permissions. Please
 refer to the [Requirements](#Requirements) section for this matter.
 
-### Useful commands for troubleshooting
+### Ask for help
 
-Below there are some useful commands to troubleshoot your docker-compose file.
+For an extra guidance or to further support, contact to <support@devo.com>.
 
-#### View the Devo NG-Relay logs
+## Useful commands
+
+Below there are some useful commands to work with this docker-compose file.
+
+### Start the Devo NG-Relay and Devo NG-Relay CLI
+
+```bash
+docker-compose run -rm devo-ng-relay-cli
+```
+
+### Start the Devo NG-Relay only
+
+```bash
+docker-compose up [-d] devo-ng-relay
+```
+
+### View the Devo NG-Relay logs
 
 ```bash
 docker-compose logs -f devo-ng-relay
 ```
 
-#### Display information about the status and ports of containers started with this file
+### Display information about the status and ports of containers started with this file
 
 ```bash
 docker-compose ps -a
 ```
 
-#### Stop and destroy all the containers
+### Stop and destroy all the containers
 
 ```bash
 docker-compose down
 ```
 
-### Ask for help
+### Enter into the Devo NG-Relay container
 
-For an extra guidance or to further support, contact to <support@devo.com>.
+```bash
+docker exec -it devo-ng-relay bash
+```
 
 ## Links
 
