@@ -39,7 +39,7 @@ them. There is a short description of each of them below:
 | --------------------- | :-------: | :-----------: | ----------- |
 | NG_RELAY_VERSION      | Yes       | 2.0.1         | Version of the Devo NG-Relay. |
 | LOG_LEVEL             | No        | info          | Sets the log level for the Devo NG-Relay. |
-| JAVA_OPTS             | No        |               | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
+| JAVA_OPTS             | No        | -Xmx1G -Xms1G | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
 | TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
 | UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
 | NG_RELAY_CLI_VERSION  | Yes       | 1.0.0         | Version of the Devo NG-Relay CLI. |
