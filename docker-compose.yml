@@ -1,0 +1,40 @@
+services:
+  devo-ng-relay:
+    image: devoinc/devo-ng-relay:${DEVO_NG_RELAY_VERSION}
+    container_name: devo-ng-relay
+    ports:
+      # reserved ports mapping
+      - 12996-12998:12996-12998/tcp
+      - 12999:12999/udp
+      - 13000-13002:13000-13002/tcp
+      - 13000-13002:13000-13002/udp
+      # user-defined rules port mapping
+      - ${TCP_PORT_RANGE:-13003-13020}:${TCP_PORT_RANGE:-13003-13020}/tcp
+      - ${UDP_PORT_RANGE:-13003-13020}:${UDP_PORT_RANGE:-13003-13020}/udp
+    environment:
+      MADURO_CONF: /opt/devo/ng-relay/conf
+      ROOT_LOG_LEVEL: ${LOG_LEVEL:-info}
+      JAVA_OPTS: "-Dfile.encoding=UTF-8 -XX:+UseConcMarkSweepGC ${JAVA_OPTS}"
+    volumes:
+      - conf:/opt/devo/ng-relay/conf
+      - ./buffer:/var/logt/buffer
+      - ./logs:/var/logt/local
+    restart: always
+
+  devo-ng-relay-cli:
+    image: devoinc/devo-ng-relay-cli:${DEVO_NG_RELAY_CLI_VERSION}
+    container_name: devo-ng-relay-cli
+    environment:
+      host: devo-ng-relay
+    entrypoint: [ "/bin/bash", "-c",
+      "sleep 5; exec java -jar /opt/devo/devo-ng-relay-cli.jar" ]
+    depends_on:
+      - devo-ng-relay
+
+volumes:
+  conf:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: './conf'
