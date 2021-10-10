@@ -50,7 +50,7 @@ The recommended way to launch this docker-compose is executing the following
 command:
 
 ```bash
-docker-compose run -rm devo-ng-relay-cli
+docker-compose run --rm devo-ng-relay-cli
 ```
 
 The command above will run the Devo NG-Relay and the Devo NG-Relay CLI and will
@@ -100,7 +100,7 @@ This occurs because the Devo NG-Relay is not fully started when the Devo
 NG-Relay CLI started. To solve this, simply re-run the command below:
 
 ```bash
-docker-compose run -rm devo-ng-relay-cli
+docker-compose run --rm devo-ng-relay-cli
 ```
 
 ### When I modify an environment variable the changes are not reflected to the container
@@ -169,7 +169,7 @@ Below there are some useful commands to work with this docker-compose file.
 ### Start the Devo NG-Relay and Devo NG-Relay CLI
 
 ```bash
-docker-compose run -rm devo-ng-relay-cli
+docker-compose run --rm devo-ng-relay-cli
 ```
 
 ### Start the Devo NG-Relay only
