@@ -4,32 +4,37 @@ This repository contains an example of how to run the Devo NG-Relay and Devo
 NG-Relay CLI together with [docker compose](https://github.com/docker/compose).
 It is not mandatory, but recommended, to run both applications.
 
-## Requirements
+* [Requirements](#reqs)
+* [Preparation](#prep)
+* [Start the relay](#start)
+* [Stop the relay](#stop)
+* [Check the relay logs](#logs)
+* [Troubleshooting](#troubleshooting)
 
-To use this docker-compose file the following requirements must be met:
+## Requirements {#reqs}
 
+Make sure you can provide a host machine with the requirements specified in [this article](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/planning-devo-relay-deployment).
+
+As we will use docker to run the relay, the following additional requirements have to be met:
 * docker-compose version: [v1.27+](https://github.com/docker/compose/releases)
-* the following folders **must exist at the same level as *docker-compose.yaml*
-  file**:
-    * *conf*: Stores the NG-Relay configuration. The first time the Devo NG-Relay
-      is run, a default configuration is populated to this folder. Once the default
-      configuration is populated, the subsequent times the Devo NG-Relay is run
-      nothing will be populated unless the folder is empty.
-    * *buffer*: Stores the Devo NG-Relay buffer.
-    * *logs*: Stores the Devo NG-Relay logs.
-* All the above folders must have *write* and *execute* permissions for *others*.
 
-An example of the last two points may be:
+## Preparation {#prep}
+
+* Clone this repo in the machine where you want to install the relay
+
+* Create new folders for config, local logs, and disk buffer in the same folder where the `docker-compose.yml` file is located.
 
 ```bash
-# Create the folders
 mkdir conf buffer logs
+```
 
-# Grant write and execution for 'others'
+* All the above folders must have *write* and *execute* permissions for *others*.
+
+```bash
 sudo chmod 777 conf/ buffer/ logs/
 ```
 
-## Environment
+* Edit the environment file
 
 To work with this docker-compose file, some environment variables need to be
 set. For this purpose, there is an environment file `.env` in which you can set
@@ -44,7 +49,7 @@ them. There is a short description of each of them below:
 | UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
 | NG_RELAY_CLI_VERSION  | Yes       | 1.0.0         | Version of the Devo NG-Relay CLI. |
 
-## Quick Start
+## Start the relay {#start}
 
 The recommended way to launch this docker-compose is executing the following
 command:
@@ -53,25 +58,33 @@ command:
 docker-compose run --rm devo-ng-relay-cli
 ```
 
-The command above will run the Devo NG-Relay and the Devo NG-Relay CLI and will
-present the prompt of the Devo NG-Relay CLI waiting for commands to run.
+> The command above will run the Devo NG-Relay and the Devo NG-Relay CLI and will
+present the prompt of the Devo NG-Relay CLI waiting for commands to run. You can type exit when you are done with the CLI. The relay container will continue up and running. 
 
-If you only want to launch the Devo NG-Relay, you can try one of the following
-commands:
+> The first time a relay is started, you will have to perform the setup process using the CLI. To do it, follow the steps indicated in [Set up your relay](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/configuring-devo-relay/configuring-devo-relay-on-the-linux-command-line/set-up-your-relay).
 
-* Attached mode:
-  ```bash
-  docker-compose up devo-ng-relay
-  ```
-
-* Detached mode:
-  ```bash
-  docker-compose up -d devo-ng-relay
-  ```
-If you encounter any problem, refer to the [Troubleshooting](#Troubleshooting)
+If you encounter any problem, refer to the [Troubleshooting](#troubleshooting)
 section.
 
-## Troubleshooting
+## Stop the relay {#stop}
+
+To stop and destroy all the containers and networks created before, run the following command:
+
+```bash
+docker-compose down
+```
+
+> Note that the relay configuration will remain available as it is stored outside the containers. Using the start command above will start the relay again using the existing configuration. 
+
+## Check the relay logs {#logs}
+
+To check the relay container logs, use this command:
+
+```bash
+docker-compose logs -f devo-ng-relay
+```
+
+## Troubleshooting {#troubleshooting}
 
 ### Devo NG-Relay CLI cannot connect to Devo NG-Relay
 
@@ -174,9 +187,18 @@ docker-compose run --rm devo-ng-relay-cli
 
 ### Start the Devo NG-Relay only
 
-```bash
-docker-compose up [-d] devo-ng-relay
-```
+If you only want to launch the Devo NG-Relay, you can try one of the following
+commands:
+
+* Attached mode:
+  ```bash
+  docker-compose up devo-ng-relay
+  ```
+
+* Detached mode:
+  ```bash
+  docker-compose up -d devo-ng-relay
+  ```
 
 ### View the Devo NG-Relay logs
 
