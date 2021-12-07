@@ -4,21 +4,21 @@ This repository contains an example of how to run the Devo NG-Relay and Devo
 NG-Relay CLI together with [docker compose](https://github.com/docker/compose).
 It is not mandatory, but recommended, to run both applications.
 
-* [Requirements](#reqs)
-* [Preparation](#prep)
-* [Start the relay](#start)
-* [Stop the relay](#stop)
-* [Check the relay logs](#logs)
-* [Troubleshooting](#troubleshooting)
+* [Requirements](#Requirements)
+* [Preparation](#Preparation)
+* [Start the relay](#Start-the-relay)
+* [Stop the relay](#Stop-the-relay)
+* [Check the relay logs](#Check-the-relay-logs)
+* [Troubleshooting](#Troubleshooting)
 
-## Requirements {#reqs}
+## Requirements
 
 Make sure you can provide a host machine with the requirements specified in [this article](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/planning-devo-relay-deployment).
 
 As we will use docker to run the relay, the following additional requirements have to be met:
 * docker-compose version: [v1.27+](https://github.com/docker/compose/releases)
 
-## Preparation {#prep}
+## Preparation
 
 * Clone this repo in the machine where you want to install the relay
 
@@ -49,7 +49,7 @@ them. There is a short description of each of them below:
 | UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
 | NG_RELAY_CLI_VERSION  | Yes       | 1.0.0         | Version of the Devo NG-Relay CLI. |
 
-## Start the relay {#start}
+## Start the relay
 
 The recommended way to launch this docker-compose is executing the following
 command:
@@ -63,10 +63,10 @@ present the prompt of the Devo NG-Relay CLI waiting for commands to run. You can
 
 > The first time a relay is started, you will have to perform the setup process using the CLI. To do it, follow the steps indicated in [Set up your relay](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/configuring-devo-relay/configuring-devo-relay-on-the-linux-command-line/set-up-your-relay).
 
-If you encounter any problem, refer to the [Troubleshooting](#troubleshooting)
+If you encounter any problem, refer to the [Troubleshooting](#Troubleshooting)
 section.
 
-## Stop the relay {#stop}
+## Stop the relay
 
 To stop and destroy all the containers and networks created before, run the following command:
 
@@ -76,7 +76,7 @@ docker-compose down
 
 > Note that the relay configuration will remain available as it is stored outside the containers. Using the start command above will start the relay again using the existing configuration. 
 
-## Check the relay logs {#logs}
+## Check the relay logs
 
 To check the relay container logs, use this command:
 
@@ -84,7 +84,7 @@ To check the relay container logs, use this command:
 docker-compose logs -f devo-ng-relay
 ```
 
-## Troubleshooting {#troubleshooting}
+## Troubleshooting
 
 ### Devo NG-Relay CLI cannot connect to Devo NG-Relay
 
