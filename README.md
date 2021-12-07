@@ -10,6 +10,7 @@ It is not mandatory, but recommended, to run both applications.
 * [Stop the relay](#Stop-the-relay)
 * [Check the relay logs](#Check-the-relay-logs)
 * [Troubleshooting](#Troubleshooting)
+* [Useful commands](#Useful-commands)
 
 ## Requirements
 
