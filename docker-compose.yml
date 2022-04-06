@@ -14,7 +14,7 @@ services:
     environment:
       MADURO_CONF: /opt/devo/ng-relay/conf
       ROOT_LOG_LEVEL: ${LOG_LEVEL:-info}
-      JAVA_OPTS: "-Dfile.encoding=UTF-8 -XX:+UseConcMarkSweepGC ${JAVA_OPTS}"
+      JAVA_OPTS: "-Dfile.encoding=UTF-8 ${JAVA_OPTS}"
     volumes:
       - conf:/opt/devo/ng-relay/conf
       - ./buffer:/var/logt/buffer
@@ -26,8 +26,8 @@ services:
     container_name: devo-ng-relay-cli
     environment:
       host: devo-ng-relay
-    entrypoint: [ "/bin/bash", "-c",
-      "sleep 5; exec java -jar /opt/devo/devo-ng-relay-cli.jar" ]
+    entrypoint: [ "/bin/sh", "-c",
+      "sleep 5; exec java -jar /opt/devo/devo-ng-relay-cli.jar --host=$$host" ]
     depends_on:
       - devo-ng-relay
 
