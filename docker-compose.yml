@@ -16,7 +16,7 @@ services:
       ROOT_LOG_LEVEL: ${LOG_LEVEL:-info}
       JAVA_OPTS: "-Dfile.encoding=UTF-8 ${JAVA_OPTS}"
     volumes:
-      - conf:/opt/devo/ng-relay/conf
+      - ./conf:/opt/devo/ng-relay/conf
       - ./buffer:/var/logt/buffer
       - ./logs:/var/logt/local
     restart: always
