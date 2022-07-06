@@ -141,6 +141,27 @@ ERROR: for devo-ng-relay  Cannot create container for service devo-ng-relay: fai
 If this happens to you, please refer to the [Requirements](#Requirements)
 section and ensure that the folders have been created correctly.
 
+### Failed to mount local volume error
+
+A very similar issue to the one before is this error:
+
+```
+Error response from daemon: failed to mount local volume: mount ./conf:/var/lib/docker/volumes/xxxx_conf/_data, flags: 0x1000: no such file or directory
+```
+
+This may happen to you if this docker-compose file is run by using the new 
+`Compose V2`. if this is your case, please update this project to `1.2.1+`, at 
+least, and re-run the docker compose file.
+
+**NOTE**: Depending on the shell you are running this compose file, it may or
+may not be necessary to export a variable called `PWD` pointing to the path 
+where the volumes are located prior to run the docker compose. For example:
+
+```
+export PWD=$(pwd)                           # PWD points to the current dir
+docker compose run --rm devo-ng-relay-cli   # Start the docker compose
+```
+
 ### After configuring a new relay I see exceptions thrown in the logs
 
 An example of this kind of errors is the following:
@@ -229,7 +250,7 @@ docker exec -it devo-ng-relay bash
 
 [Devo](https://www.devo.com/)
 
-[Devo NG-Relay documentation](https://docs.devo.com/confluence/ndt/latest/sending-data-to-devo)
+[Devo NG-Relay documentation](https://docs.devo.com/space/latest/96468993/Devo+Relay)
 
 [Devo in DockerHub](https://hub.docker.com/u/devoinc)
 

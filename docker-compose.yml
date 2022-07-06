@@ -17,8 +17,8 @@ services:
       JAVA_OPTS: "-Dfile.encoding=UTF-8 ${JAVA_OPTS}"
     volumes:
       - conf:/opt/devo/ng-relay/conf
-      - ./buffer:/var/logt/buffer
-      - ./logs:/var/logt/local
+      - ${PWD:-.}/buffer:/var/logt/buffer
+      - ${PWD:-.}/logs:/var/logt/local
     restart: always
 
   devo-ng-relay-cli:
@@ -37,4 +37,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: './conf'
+      device: '${PWD:-.}/conf'
