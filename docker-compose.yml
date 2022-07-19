@@ -37,4 +37,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: './conf'
+      device: '${PWD:-.}/conf'
