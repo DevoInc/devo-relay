@@ -43,7 +43,7 @@ them. There is a short description of each of them below:
 
 | Name                  | Mandatory | Default Value | Description |
 | --------------------- | :-------: | :-----------: | ----------- |
-| NG_RELAY_VERSION      | Yes       | 2.3.0         | Version of the Devo NG-Relay. |
+| NG_RELAY_VERSION      | Yes       | 2.3.1         | Version of the Devo NG-Relay. |
 | LOG_LEVEL             | No        | info          | Sets the log level for the Devo NG-Relay. |
 | JAVA_OPTS             | No        | -Xmx1G -Xms1G | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
 | TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
