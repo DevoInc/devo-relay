@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.0] -
 
-- devo-ng-relay v2.3.0
+- devo-ng-relay v2.3.1
 
 ## [1.3.0] - 2022-09-13
 
