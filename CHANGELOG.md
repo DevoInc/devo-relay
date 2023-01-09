@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.4.0] -
 
 - devo-ng-relay v2.3.1
+- devo-ng-relay-cli v1.2.4
 
 ## [1.3.0] - 2022-09-13
 
