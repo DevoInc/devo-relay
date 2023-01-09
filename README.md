@@ -48,7 +48,7 @@ them. There is a short description of each of them below:
 | JAVA_OPTS             | No        | -Xmx1G -Xms1G | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
 | TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
 | UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
-| NG_RELAY_CLI_VERSION  | Yes       | 1.2.2         | Version of the Devo NG-Relay CLI. |
+| NG_RELAY_CLI_VERSION  | Yes       | 1.2.4         | Version of the Devo NG-Relay CLI. |
 
 ## Start the relay
 
