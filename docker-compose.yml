@@ -1,4 +1,58 @@
 services:
+  # One-shot upgrade helper: refresh the product-owned static/ (DSL extensions,
+  # templates, internal configurations) from the relay image. Because conf/ is
+  # bind-mounted, an image-only upgrade would otherwise keep the static/ scripts
+  # from whatever version first populated the mount, silently disabling fixes
+  # shipped in newer images (e.g. the RFC5424-off default in common.py/local.py).
+  #
+  # This is OPT-IN: it sits in the "upgrade" profile, so it is NOT started by
+  # `docker-compose up` or `docker-compose run devo-ng-relay-cli`. Run it
+  # explicitly after bumping DEVO_NG_RELAY_VERSION in .env, before starting:
+  #     docker-compose run --rm devo-ng-relay-static-sync
+  #
+  # It mounts the conf volume at /target (NOT over the image conf), so the
+  # image's pristine static/ stays visible and is copied into the shared volume.
+  # Each run backs up the current static/ to static.bak/ and replaces it with the
+  # image's copy. custom.py is only installed when missing (configs created by
+  # 2.x have none) and is never overwritten; relay.properties, keys/, rules/,
+  # buffer and logs are never touched. Only the most recent static.bak/ is kept.
+  devo-ng-relay-static-sync:
+    image: devoinc/devo-ng-relay:${DEVO_NG_RELAY_VERSION}
+    container_name: devo-ng-relay-static-sync
+    profiles:
+      - upgrade
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        SRC=/opt/devo/ng-relay/conf/relay/run/static
+        DST=/target/relay/run/static
+        BAK=/target/relay/run/static.bak
+        VER=$$(ls /opt/devo/ng-relay/lib/maduro-server-*.jar 2>/dev/null | sed -n 's#.*/maduro-server-\(.*\)\.jar#\1#p' | head -n1)
+        STAMP=$$DST/.image-version
+        CUR=$$(cat "$$STAMP" 2>/dev/null || echo "")
+        if [ ! -d "$$SRC" ]; then
+          echo "[static-sync] no shipped static/ in image; skipping"
+          exit 0
+        fi
+        if [ -d "$$DST" ]; then
+          rm -rf "$$BAK" && mv "$$DST" "$$BAK"
+          echo "[static-sync] backed up previous static/ ('$${CUR:-none}') to static.bak/"
+        fi
+        mkdir -p "$$DST" && cp -a "$$SRC/." "$$DST/"
+        printf '%s\n' "$$VER" > "$$STAMP"
+        echo "[static-sync] refreshed static/ ('$${CUR:-none}' -> '$${VER:-unknown}')"
+        CSRC=/opt/devo/ng-relay/conf/relay/run/custom.py
+        CDST=/target/relay/run/custom.py
+        if [ -f "$$CSRC" ] && [ ! -e "$$CDST" ]; then
+          cp -a "$$CSRC" "$$CDST"
+          echo "[static-sync] custom.py was missing; installed the image default"
+        fi
+    volumes:
+      - conf:/target
+    restart: "no"
+
   devo-ng-relay:
     image: devoinc/devo-ng-relay:${DEVO_NG_RELAY_VERSION}
     container_name: devo-ng-relay
