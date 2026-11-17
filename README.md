@@ -94,11 +94,11 @@ git stash && git pull && git stash pop   # new docker-compose.yml and version
 docker-compose down
 sudo tar czf conf-backup.tgz conf
 docker-compose run --rm devo-ng-relay-static-sync
-docker-compose up -d
+docker-compose run --rm devo-ng-relay-cli   # starts the relay; in the CLI run `test` to verify
 ```
 
-The relay is stopped between `down` and `up -d`, so events sent during that
-time are not ingested (UDP events are lost; TCP events only survive if the
+The relay is stopped from `down` until the last command starts it again, so
+events sent during that time are not ingested (UDP events are lost; TCP events only survive if the
 sender resends them). Plan a short maintenance window.
 
 Changing the version alone is not enough: `conf/relay/run/static/` stays on the
