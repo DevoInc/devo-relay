@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0] - 2026-11-17
+
+- Add the opt-in `devo-ng-relay-static-sync` service to refresh
+  `conf/relay/run/static/` from the relay image on upgrade (saves the previous
+  copy as `static.bak/`, installs a default `custom.py` only if missing)
+- Add `MIGRATION.md` with the upgrade procedure, including 2.x to 3.x
+
 ## [1.18.0] - 2026-11-12
 
 - devo-ng-relay v3.1.1

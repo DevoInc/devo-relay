@@ -4,50 +4,52 @@ This repository contains an example of how to run the Devo NG-Relay and Devo
 NG-Relay CLI together with [docker compose](https://github.com/docker/compose).
 It is not mandatory, but recommended, to run both applications.
 
-* [Requirements](#Requirements)
-* [Preparation](#Preparation)
-* [Start the relay](#Start-the-relay)
-* [Stop the relay](#Stop-the-relay)
-* [Check the relay logs](#Check-the-relay-logs)
-* [Troubleshooting](#Troubleshooting)
-* [Useful commands](#Useful-commands)
+- [Requirements](#Requirements)
+- [Preparation](#Preparation)
+- [Start the relay](#Start-the-relay)
+- [Stop the relay](#Stop-the-relay)
+- [Check the relay logs](#Check-the-relay-logs)
+- [Editing the relay configuration](#Editing-the-relay-configuration)
+- [Upgrading the relay](#Upgrading-the-relay)
+- [Troubleshooting](#Troubleshooting)
+- [Useful commands](#Useful-commands)
 
 ## Requirements
 
 Make sure you can provide a host machine with the requirements specified in [this article](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/planning-devo-relay-deployment).
 
 As we will use docker to run the relay, the following additional requirements have to be met:
-* docker-compose version: [v1.27+](https://github.com/docker/compose/releases)
+
+- docker-compose version: [v1.27+](https://github.com/docker/compose/releases)
 
 ## Preparation
 
-* Clone this repo in the machine where you want to install the relay
+- Clone this repo in the machine where you want to install the relay
 
-* Create new folders for config, local logs, and disk buffer in the same folder where the `docker-compose.yml` file is located.
+- Create new folders for config, local logs, and disk buffer in the same folder where the `docker-compose.yml` file is located.
 
 ```bash
 mkdir conf buffer logs
 ```
 
-* All the above folders must have *write* and *execute* permissions for *others*.
+- All the above folders must have _write_ and _execute_ permissions for _others_.
 
 ```bash
 sudo chmod 777 conf/ buffer/ logs/
 ```
 
-* Edit the environment file
+- Edit the environment file
 
 To work with this docker-compose file, some environment variables need to be
 set. For this purpose, there is an environment file `.env` in which you can set
 them. There is a short description of each of them below:
 
-| Name                  | Mandatory | Default Value | Description |
-| --------------------- | :-------: | :-----------: | ----------- |
-| LOG_LEVEL             | No        | info          | Sets the log level for the Devo NG-Relay. |
-| JAVA_OPTS             | No        | -Xmx1G -Xms1G | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
-| TCP_PORT_RANGE        | No        | 13003-13020   | Used to open the TCP ports specified in all the user-defined rules. |
-| UDP_PORT_RANGE        | No        | 13003-13020   | Used to open the UDP ports specified in all the user-defined rules. |
-
+| Name                 | Mandatory | Default Value | Description                                                                            |
+| -------------------- | :-------: | :-----------: | -------------------------------------------------------------------------------------- |
+| LOG_LEVEL            |    No     |     info      | Sets the log level for the Devo NG-Relay.                                              |
+| JAVA_OPTS            |    No     | -Xmx1G -Xms1G | Space-separated quoted list in which you can activate/deactivate any of the JVM flags. |
+| TCP_PORT_RANGE       |    No     |  13003-13020  | Used to open the TCP ports specified in all the user-defined rules.                    |
+| UDP_PORT_RANGE       |    No     |  13003-13020  | Used to open the UDP ports specified in all the user-defined rules.                    |
 ## Start the relay
 
 The recommended way to launch this docker-compose is executing the following
@@ -58,7 +60,7 @@ docker-compose run --rm devo-ng-relay-cli
 ```
 
 > The command above will run the Devo NG-Relay and the Devo NG-Relay CLI and will
-present the prompt of the Devo NG-Relay CLI waiting for commands to run. You can type exit when you are done with the CLI. The relay container will continue up and running. 
+> present the prompt of the Devo NG-Relay CLI waiting for commands to run. You can type exit when you are done with the CLI. The relay container will continue up and running.
 
 > The first time a relay is started, you will have to perform the setup process using the CLI. To do it, follow the steps indicated in [Set up your relay](https://docs.devo.com/confluence/ndt/v7.7.0/sending-data-to-devo/devo-relay/configuring-devo-relay/configuring-devo-relay-on-the-linux-command-line/set-up-your-relay).
 
@@ -73,7 +75,7 @@ To stop and destroy all the containers and networks created before, run the foll
 docker-compose down
 ```
 
-> Note that the relay configuration will remain available as it is stored outside the containers. Using the start command above will start the relay again using the existing configuration. 
+> Note that the relay configuration will remain available as it is stored outside the containers. Using the start command above will start the relay again using the existing configuration.
 
 ## Check the relay logs
 
@@ -82,6 +84,52 @@ To check the relay container logs, use this command:
 ```bash
 docker-compose logs -f devo-ng-relay
 ```
+
+## Editing the relay configuration
+
+The `conf/`, `buffer/` and `logs/` folders are shared with the relay container,
+not copied into it. Any file you edit or delete there changes inside the
+container immediately.
+
+- After editing `conf/relay/run/custom.py` or anything in
+  `conf/relay/run/static/`, restart the relay so it reads the changes:
+
+  ```bash
+  docker-compose restart devo-ng-relay
+  ```
+
+- Do not delete files under `conf/`. Removing `keys/` or `relay.properties`, for
+  example, stops the relay from connecting to Devo. Back up first with
+  `sudo tar czf conf-backup.tgz conf`.
+- `conf/relay/run/local.py` is rebuilt every time the relay starts, so edits to
+  it are lost. Put persistent settings in `custom.py` instead.
+- Changes to `.env` or `docker-compose.yml` need the container to be recreated,
+  not just restarted. See
+  [When I modify an environment variable the changes are not reflected to the container](#When-I-modify-an-environment-variable-the-changes-are-not-reflected-to-the-container).
+
+## Upgrading the relay
+
+Every time you change `DEVO_NG_RELAY_VERSION` (including major upgrades such as
+2.x to 3.x), follow [MIGRATION.md](MIGRATION.md). In short:
+
+```bash
+git stash && git pull && git stash pop   # new docker-compose.yml and version
+docker-compose down
+sudo tar czf conf-backup.tgz conf
+docker-compose run --rm devo-ng-relay-static-sync
+docker-compose run --rm devo-ng-relay-cli   # starts the relay; in the CLI run `test` to verify
+```
+
+The relay is stopped from `down` until the last command starts it again, so
+events sent during that time are not ingested (UDP events are lost; TCP events only survive if the
+sender resends them). Plan a short maintenance window.
+
+Changing the version alone is not enough: `conf/relay/run/static/` stays on the
+old version unless you run `devo-ng-relay-static-sync`, which can turn RFC5424
+parsing on and send RFC3164 sources such as Meraki to `unknown.unknown`. The
+helper only runs when you call it. It saves the current `static/` as
+`static.bak/` and keeps `relay.properties`, `keys/`, `rules/`, `unrules/`,
+`custom.py` and the disk buffer.
 
 ## Troubleshooting
 
@@ -108,6 +156,7 @@ Consider launching the application with the following arguments:
 ERROR: 1
 
 ```
+
 This occurs because the Devo NG-Relay is not fully started when the Devo
 NG-Relay CLI started. To solve this, simply re-run the command below:
 
@@ -144,7 +193,7 @@ section and ensure that the folders have been created correctly.
 A very similar issue to the one before is this error:
 
 ```
-Error response from daemon: failed to mount local volume: 
+Error response from daemon: failed to mount local volume:
 mount ./conf:/var/lib/docker/volumes/xxxx_conf/_data, flags: 0x1000: no such file or directory
 ```
 
@@ -152,7 +201,7 @@ This may happen to you if this docker-compose file is run by using the new
 `Compose V2`. If that is the case, please update this project to `1.2.1+`, at
 least, and re-run the docker compose file.
 
-There is several bugs related to this issue on Github for docker compose V2 
+There is several bugs related to this issue on Github for docker compose V2
 ([link](https://github.com/docker/compose/issues?q=is%3Aopen+label%3A%22Docker+Compose+V2%22+Relative)).
 
 **NOTE**: Depending on the shell you are running this compose file, it may or
@@ -214,12 +263,13 @@ docker-compose run --rm devo-ng-relay-cli
 If you only want to launch the Devo NG-Relay, you can try one of the following
 commands:
 
-* Attached mode:
+- Attached mode:
+
   ```bash
   docker-compose up devo-ng-relay
   ```
 
-* Detached mode:
+- Detached mode:
   ```bash
   docker-compose up -d devo-ng-relay
   ```
