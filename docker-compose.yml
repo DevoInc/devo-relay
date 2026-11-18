@@ -12,8 +12,11 @@ services:
   #
   # It mounts the conf volume at /target (NOT over the image conf), so the
   # image's pristine static/ stays visible and is copied into the shared volume.
-  # Each run backs up the current static/ to static.bak/ and replaces it with the
-  # image's copy. custom.py is only installed when missing (configs created by
+  # If static/.image-version already matches the image, it does nothing, so
+  # running it twice keeps the pre-upgrade static.bak/. Otherwise it backs up the
+  # current static/ to static.bak/ and replaces it with the image's copy. To force
+  # a refresh on the same version, delete static/.image-version first.
+  # custom.py is only installed when missing (configs created by
   # 2.x have none) and is never overwritten; relay.properties, keys/, rules/,
   # buffer and logs are never touched. Only the most recent static.bak/ is kept.
   devo-ng-relay-static-sync:
@@ -36,11 +39,15 @@ services:
           echo "[static-sync] no shipped static/ in image; skipping"
           exit 0
         fi
+        if [ -n "$$VER" ] && [ "$$CUR" = "$$VER" ]; then
+          echo "[static-sync] static/ already matches image version '$$VER'; skipping"
+          exit 0
+        fi
         if [ -d "$$DST" ]; then
           rm -rf "$$BAK" && mv "$$DST" "$$BAK"
           echo "[static-sync] backed up previous static/ ('$${CUR:-none}') to static.bak/"
         fi
-        mkdir -p "$$DST" && cp -a "$$SRC/." "$$DST/"
+        mkdir -p "$$(dirname "$$DST")" && cp -a "$$SRC" "$$DST"
         printf '%s\n' "$$VER" > "$$STAMP"
         echo "[static-sync] refreshed static/ ('$${CUR:-none}' -> '$${VER:-unknown}')"
         CSRC=/opt/devo/ng-relay/conf/relay/run/custom.py
