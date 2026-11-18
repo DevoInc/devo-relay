@@ -24,8 +24,8 @@ The upgrade steps below refresh `static/` so it matches the new engine.
 
 ## Upgrade
 
-> **Plan a maintenance window.** From `docker-compose down` (step 1) until
-> the relay starts again in step 4, the relay is stopped and its ports
+> **Plan a maintenance window.** From `docker-compose down` (step 2) until
+> the relay starts again in step 5, the relay is stopped and its ports
 > are closed, so no events are received or sent to Devo. This usually takes a
 > few minutes.
 >
@@ -53,40 +53,40 @@ If `git stash pop` reports a conflict in `.env`, open the file, keep the new
 `DEVO_NG_RELAY_VERSION` line plus your own settings, and remove the conflict
 markers (`<<<<<<<`, `=======`, `>>>>>>>`).
 
-Then check which version will be installed:
-
-```bash
-grep DEVO_NG_RELAY_VERSION .env
-```
-
-To install a different version, edit that line before continuing. The commands
-below use whatever version is set there; if it still shows your old version,
-they will reinstall the old version instead of upgrading.
+The commands below use whatever `DEVO_NG_RELAY_VERSION` is set in `.env`; if it
+still shows your old version, they will reinstall the old version instead of
+upgrading.
 
 ### Run the upgrade
 
 ```bash
-# 1. Stop the relay
+# 1. Set the new version in .env, then check it
+#    DEVO_NG_RELAY_VERSION = <target version>
+grep DEVO_NG_RELAY_VERSION .env
+
+# 2. Stop the relay
 docker-compose down
 
-# 2. Back up your whole configuration (just in case)
+# 3. Back up your whole configuration (just in case)
 sudo tar czf conf-backup.tgz conf
 
-# 3. Refresh static/ from the new image
+# 4. Refresh static/ from the new image
 #    (your current static/ is saved to conf/relay/run/static.bak)
 docker-compose run --rm devo-ng-relay-static-sync
 
-# 4. Recreate the relay on the new image and open the CLI
+# 5. Recreate the relay on the new image and open the CLI
 docker-compose run --rm devo-ng-relay-cli
 ```
 
-Run step 3 before step 4. The CLI starts the relay, so if it runs first the
+Run step 4 before step 5. The CLI starts the relay, so if it runs first the
 new engine starts with the old `static/`. When you exit the CLI, the relay keeps
 running.
 
 ### Check that it worked
 
-In the CLI opened by step 4, run `test`:
+In the CLI opened by step 5, wait 1-2 minutes, then run `test`. After the
+upgrade the relay needs a moment to finish starting up internally, so running
+`test` straight away can fail even when the upgrade worked.
 
 ```
 DEVO-RELAY:> test
@@ -97,7 +97,8 @@ Retrieving the test data using the query API...
 ```
 
 The command sends a test event through the relay and reads it back from Devo.
-If it does not print `SUCCESS`, see [Rollback](#rollback).
+If it does not print `SUCCESS`, wait another minute and run `test` again. If it
+still fails, see [Rollback](#rollback).
 
 You can also check from the shell:
 
@@ -189,12 +190,23 @@ on ingestion as the upgrade.
 Do **not** run `static-sync` after restoring, because it would overwrite the
 restored files. If something else went wrong, restore the full backup instead:
 
+Run this from the folder that contains `docker-compose.yml` and
+`conf-backup.tgz`. It changes nothing unless both files are there and the backup
+can be read, and it renames your current `conf/` instead of deleting it:
+
 ```bash
 docker-compose down
-sudo rm -rf conf
-sudo tar xzf conf-backup.tgz
-docker-compose run --rm devo-ng-relay-cli
+[ -f docker-compose.yml ] && [ -f conf-backup.tgz ] \
+  && sudo tar tzf conf-backup.tgz >/dev/null \
+  && sudo mv conf "conf.broken-$(date +%Y%m%d%H%M%S)" \
+  && sudo tar xzf conf-backup.tgz \
+  && docker-compose run --rm devo-ng-relay-cli
 ```
+
+If the CLI does not open, one of the checks failed and `conf/` was left as it
+was; check that you are in the right folder and that `conf-backup.tgz` exists.
+Once the relay works again, delete the old copy with
+`sudo rm -rf conf.broken-*`.
 
 ## Cleanup
 
@@ -202,7 +214,7 @@ Once the relay is healthy and events are landing in the right tables, you can
 delete the backups:
 
 ```bash
-sudo rm -rf conf/relay/run/static.bak conf-backup.tgz
+sudo rm -rf conf/relay/run/static.bak conf-backup.tgz conf.broken-*
 ```
 
 ## "no such service: devo-ng-relay-static-sync"

@@ -9,6 +9,7 @@ It is not mandatory, but recommended, to run both applications.
 - [Start the relay](#Start-the-relay)
 - [Stop the relay](#Stop-the-relay)
 - [Check the relay logs](#Check-the-relay-logs)
+- [Editing the relay configuration](#Editing-the-relay-configuration)
 - [Upgrading the relay](#Upgrading-the-relay)
 - [Troubleshooting](#Troubleshooting)
 - [Useful commands](#Useful-commands)
@@ -83,6 +84,28 @@ To check the relay container logs, use this command:
 ```bash
 docker-compose logs -f devo-ng-relay
 ```
+
+## Editing the relay configuration
+
+The `conf/`, `buffer/` and `logs/` folders are shared with the relay container,
+not copied into it. Any file you edit or delete there changes inside the
+container immediately.
+
+- After editing `conf/relay/run/custom.py` or anything in
+  `conf/relay/run/static/`, restart the relay so it reads the changes:
+
+  ```bash
+  docker-compose restart devo-ng-relay
+  ```
+
+- Do not delete files under `conf/`. Removing `keys/` or `relay.properties`, for
+  example, stops the relay from connecting to Devo. Back up first with
+  `sudo tar czf conf-backup.tgz conf`.
+- `conf/relay/run/local.py` is rebuilt every time the relay starts, so edits to
+  it are lost. Put persistent settings in `custom.py` instead.
+- Changes to `.env` or `docker-compose.yml` need the container to be recreated,
+  not just restarted. See
+  [When I modify an environment variable the changes are not reflected to the container](#When-I-modify-an-environment-variable-the-changes-are-not-reflected-to-the-container).
 
 ## Upgrading the relay
 
